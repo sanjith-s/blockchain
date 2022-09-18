@@ -88,6 +88,7 @@ class Block:
 
 class Blockchain:
     prevHash = "420"
+
     def __init__(self):
         self.chain = []
         hashVal = hashlib.sha256("genesis block".encode()).hexdigest()
@@ -102,7 +103,7 @@ class Blockchain:
         currBlock.hashVal = hashVal
         currBlock.merkleroot = 0
 
-        #print("Appending block")
+        # print("Appending block")
         self.chain.append(currBlock)
 
         Blockchain.prevHash = hashVal
