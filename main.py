@@ -19,9 +19,6 @@ class Node:
         return (str(self.value))
 
     def copy(self):
-        """
-        class copy function
-        """
         return Node(self.left, self.right, self.value, self.content, True)
 
 
@@ -85,6 +82,9 @@ class Block:
         hashObj = hashlib.sha256(self.data.encode())
         return hashObj.hexdigest()
 
+    def retHashVal(self):
+        return self.hashVal
+
 
 class Blockchain:
     prevHash = "420"
@@ -101,7 +101,7 @@ class Blockchain:
         currBlock = Block(Blockchain.prevHash, data)
         hashVal = currBlock.calculateHash()
         currBlock.hashVal = hashVal
-        currBlock.merkleroot = 0
+        currBlock.merkleroot = MerkleTree(self.generateListOfHashes()).getRootHash()
 
         # print("Appending block")
         self.chain.append(currBlock)
@@ -137,10 +137,36 @@ class Blockchain:
             print("Current Hash Value:", chain[i].hashVal)
             print("Data:", chain[i].data)
             print("\n")
+    def generateListOfHashes(self):
+        hashList = []
+        for i in self.chain :
+            hashList.append(i.retHashVal())
+        return hashList
+
+#test
+def mixmerkletree() -> None:
+    elems = ["GeeksforGeeks", "A", "Computer", "Science", "Portal", "For", "Geeks"]
+    # as there are odd number of inputs, the last input is repeated
+    print("Inputs: ")
+    print(*elems, sep=" | ")
+    print("")
+    mtree = MerkleTree(elems)
+    print("Root Hash: " + mtree.getRootHash() + "\n")
+    # mtree.printTree()
 
 
 myChain = Blockchain()
+
 myChain.addBlock("hello")
 myChain.addBlock("this is me")
 myChain.addBlock("hello world")
+
 myChain.displayChain()
+# mixmerkletree()
+# hashList = []
+# hashList.append(myChain.generateListOfHashes())
+# print(myChain.generateListOfHashes())
+#
+# mtree = MerkleTree(myChain.generateListOfHashes())
+#
+# print(mtree.getRootHash())
